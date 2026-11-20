@@ -524,6 +524,9 @@ h1.logo i{letter-spacing:0}
 .nin:focus{outline:none;border-color:var(--gold,#d9a441)}
 .nin::placeholder{color:#8a8a9c;font-weight:400}
 .sndt{display:block;margin:10px auto 0;background:#0008;color:#cfcfd8;border:1px solid #ffffff22;border-radius:20px;padding:7px 16px;font:inherit;font-size:13px}
+.sndi{position:absolute;top:10px;right:12px;z-index:30;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff33;background:#000a;color:#fff;font-size:21px;line-height:1;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ov.end .sndi{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px)}
+.scr{position:relative}
 </style>
 </head>
 <body>
@@ -1077,6 +1080,7 @@ function descOf(c) {
 
 // ---------- schermate ----------
 function btnIc(k, fb) { return BTN_IMG[k] ? `<img class="btnimg" src="${BTN_IMG[k]}" alt="" draggable="false">` : fb; }
+const sndIcon = () => `<button class="sndi" data-a="snd" aria-label="${sndOn ? 'Disattiva i suoni' : 'Attiva i suoni'}">${sndOn ? '🔊' : '🔇'}</button>`;
 function homeHTML() {
   const t = totStats(), n = sum3(t);
   const mi = (ic, tx, sm) => `<span class="mi">${ic}</span><span class="mt">${tx}${sm ? `<small>${sm}</small>` : ''}</span>`;
@@ -1099,7 +1103,7 @@ function setupHTML() {
   const s = ui.setup, cpu = s.mode === 'cpu';
   const fb = k => `<button class="fac ${FCLS[k]}${s.faction === k ? ' on' : ''}" data-a="fac" data-v="${k}">${FACBIG_IMG[k] ? `<span class="fpic" style="background-image:url(${FACBIG_IMG[k]})"></span>` : `<span class="fpic ph"><i>${DECKS[k].ic}</i></span>`}<span class="ftx"><b>${DECKS[k].name}</b><small>${DECKS[k].passive}</small></span></button>`;
   const oc = (k, l) => `<button class="${s.opp === k ? 'on' : ''}" data-a="opp" data-v="${k}">${l}</button>`;
-  return `<div class="scr"><button class="back" data-a="home">‹ Indietro</button><h2>${cpu ? 'Contro la CPU' : 'Gioca in due'}</h2>
+  return `<div class="scr"><button class="back" data-a="home">‹ Indietro</button>${sndIcon()}<h2>${cpu ? 'Contro la CPU' : 'Gioca in due'}</h2>
   <h3>${cpu ? 'Il tuo nome' : 'Nomi dei giocatori'}</h3>
   <div class="names"><input id="pname" class="nin" maxlength="14" autocomplete="off" placeholder="${cpu ? 'Come ti chiami? (facoltativo)' : 'Giocatore 1'}" value="${esc(s.name)}">${cpu ? '' : `<input id="pname2" class="nin" maxlength="14" autocomplete="off" placeholder="Giocatore 2" value="${esc(s.name2)}">`}</div>
   ${cpu ? '<p class="note">Gli avversari hanno un nome a sorte, in base al mazzo.</p>' : ''}
@@ -1223,7 +1227,7 @@ function endHTML() {
   title = duo && st.winner !== 'draw' ? `VINCE ${sideName(st, st.winner).toUpperCase()}` : E.title;
   const fx = Array.from({ length: 26 }, (_, i) => `<span style="left:${Math.random() * 100}%;font-size:${16 + Math.random() * 26}px;animation-delay:${(-Math.random() * 7).toFixed(2)}s;animation-duration:${(4 + Math.random() * 5).toFixed(2)}s">${E.fx[i % E.fx.length]}</span>`).join('');
   const hist = st.rounds.map(x => `<div><span>Round ${x.n}</span><b>${x.p} – ${x.c}</b></div>`).join('');
-  return `<div class="ov end ${E.cls}"><div class="fx ${E.rise ? 'rise' : 'fall'}">${fx}</div><div class="siren"></div>
+  return `<div class="ov end ${E.cls}">${sndIcon()}<div class="fx ${E.rise ? 'rise' : 'fall'}">${fx}</div><div class="siren"></div>
   <div class="endbox">${END_IMG[key] ? `<img class="epic" src="${END_IMG[key]}" alt="" draggable="false">` : ''}<div class="ekick">${E.kick}</div><h1 class="etitle">${title}</h1><div class="eline">${E.line}</div>
   <div class="ehist">${hist}</div>
   <button class="btn big" data-a="again">${E.btn}</button>${st.mode === 'cpu' ? '<button class="btn" data-a="stats">Le tue partite</button>' : ''}<button class="btn" data-a="home">Home</button></div></div>`;
